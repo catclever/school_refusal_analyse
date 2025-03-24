@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="school_refusal_toolkit",
     version="0.1.0",
-    py_modules=["infra", "multi_talk"],
+    py_modules=["infra", "multi_talk", "paradigm", "statics"],
     packages=find_packages(),  # 自动查找所有包
     
     # 必需的依赖项
