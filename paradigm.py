@@ -1,6 +1,6 @@
 from openai import OpenAI
 import os
-from . import statics
+import statics
 
 MODEL_FEE = {
     'o1-preview': {
