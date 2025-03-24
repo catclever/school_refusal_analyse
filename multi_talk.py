@@ -3,7 +3,7 @@ import re
 import json
 from functools import partial
 from types import SimpleNamespace
-import llm_api as api
+import statics
 import infra
 
 
@@ -104,7 +104,7 @@ class Talk(infra.Task):
                 if isinstance(service, infra.Agent):
                     service.states['guidance']  = instruct
                 else:
-                    task_messages = api.statics.remove_system_prompt(task_messages)
+                    task_messages = statics.remove_system_prompt(task_messages)
                     instruct_message = {
                         'role': 'system',
                         'content': instruct,
@@ -353,7 +353,7 @@ class DM:
                 case 'on_a_table':
                     self.talk.main_task = 'group_discussion'
                     self._host_set(**kwargs)
-                    self.default_receivers = lambda: api.statics.take_the_microphone(self)
+                    self.default_receivers = lambda: statics.take_the_microphone(self)
                     self.current_msg_type = 'public'
                     self.msg_type_lock = True
                 case 'press_conference':
@@ -435,7 +435,7 @@ class DM:
                     image_url = input('Please enter pic url: ')
                 else:
                     image_url = para[0]
-                if api.statics.is_image(image_url):
+                if statics.is_image(image_url):
                     text = input('What do you want to talk about with the pic: ')
                     msg = [
                         {'type': 'text', 'text': text},
