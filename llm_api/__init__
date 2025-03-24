@@ -1,18 +1,2 @@
-from os.path import dirname, basename, isfile, join
-import glob
-import sys
-
-modules = glob.glob(join(dirname(__file__), "*.py"))
-# __all__ = [ basename(f)[:-3] for f in modules if isfile(f) and not f.endswith('__init__.py')]
-__all__ = []
-
-# 循环导入所有非__init__.py的模块
-for f in modules:
-    if isfile(f) and not f.endswith(('__init__.py', 'statics.py', 'setup.py')):
-        module_name = basename(f)[:-3]
-        # 将模块名添加到 __all__ 列表中
-        __all__.append(module_name)
-        # 使用 __import__ 动态导入模块，并设置为包的属性
-        module = __import__(f"{__name__}.{module_name}", fromlist=[module_name])
-        # 将模块名作为属性赋给包
-        setattr(sys.modules[__name__], module_name, module)
+from . import paradigm
+from . import statics
