@@ -1,11 +1,6 @@
 from openai import OpenAI
 import os
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, '.')
-    import statics
-else:
-    from . import statics
+from . import statics
 
 MODEL_FEE = {
     'o1-preview': {
