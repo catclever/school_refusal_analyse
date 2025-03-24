@@ -1,10 +1,17 @@
 #!/bin/bash
-set -e
 
-# 安装您的包（以开发模式）
-pip install -e .
+# 检查setup.py是否存在
+if [ -f setup.py ]; then
+    echo "发现setup.py，正在安装..."
+    pip install -e . || echo "安装失败，但继续执行"
+else
+    echo "没有找到setup.py，跳过安装"
+fi
 
 # 启用 Voila 扩展
-jupyter serverextension enable --sys-prefix voila
+jupyter serverextension enable --sys-prefix voila || echo "启用voila失败，但继续执行"
+
+# 显示已安装的包（用于调试）
+pip list
 
 echo "postBuild 完成!"
