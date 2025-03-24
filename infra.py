@@ -1,4 +1,5 @@
-import llm_api as api
+import paradigm
+import statics
 import json
 from types import SimpleNamespace
 import copy
@@ -23,31 +24,8 @@ class Service:
         self.name = name
         self.params = {}
         self.on_call_list = []
-        match server:
-            case 'baidu' | 'qianfan':
-                self.request = api.qianfan.Request(model) if model else api.qianfan.Request()
-            case 'zhipu' | 'glm':
-                self.request = api.zhipu.Request(model) if model else api.zhipu.Request()
-            case 'xunfei' | 'xf' | 'spark':
-                if model:
-                    self.request = api.xf_spark.Request(model)
-            case 'bytedance' | 'zijie' | 'volc':
-                self.request =  (
-                    api.volcai.Request(model=model, timeout=timeout) if model and timeout and timeout>0
-                    else api.volcai.Request(model=model) if model
-                    else api.volcai.Request(timeout=timeout) if timeout and timeout>0
-                    else api.volcai.Request()
-                )
-            case 'tiangong' | 'kunlun' | 'skyart':
-                self.request = api.tiangong.Request(model) if model else api.tiangong.Request()
-            case 'baichuan': 
-                self.request = api.baichuan.Request(model) if model else api.baichuan.Request()
-            case 'minimax' | 'xiyu':
-                self.request = api.minimax.Request(model) if model else api.minimax.Request()
-            case 'private' | 'private_model' | 'private_models':
-                self.request = api.private_models.Request(model) if model else api.private_models.Request()
-            case _:
-                self.request = api.paradigm.Request(server, model) if model else api.paradigm.Request(server)
+            
+        self.request = paradigm.Request(server, model) if model else paradigm.Request(server)
 
     def set_params(self, params):
         self.params.update(params)
@@ -224,7 +202,7 @@ class Agent(Service):
         task_system_prompt = 0
         if 'guidance' in self.states.keys():
             if self.states['guidance']:
-                messages = api.statics.remove_system_prompt(messages)
+                messages = statics.remove_system_prompt(messages)
                 messages.insert(0,{'role': 'system', 'content':self.states['guidance']})
                 task_system_prompt = 1
                 if 'keep_guidance' in self.states.keys():
@@ -235,7 +213,7 @@ class Agent(Service):
 
         if task_system_prompt == 0:
             if 'system_prompt' in self.properties.keys():
-                messages = api.statics.remove_system_prompt(messages)
+                messages = statics.remove_system_prompt(messages)
                 messages.insert(0,{'role': 'system', 'content':self.properties['system_prompt']})
 
         return super().respond(messages, silent, show_name, **kwargs)
