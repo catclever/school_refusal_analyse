@@ -1,4 +1,4 @@
-from . import paradigm
+import paradigm
 import statics
 import json
 from types import SimpleNamespace
