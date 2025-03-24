@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+# 安装您的包（以开发模式）
+pip install -e .
+
+# 启用 Voila 扩展
+jupyter serverextension enable --sys-prefix voila
+
+echo "postBuild 完成!"
